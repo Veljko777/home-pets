@@ -12,39 +12,20 @@
 <div class="container" >
     <h3>Top 10 most cutest pets</h3>
     <div class="row">
+       <% pets.forEach(function(pet){%>
         <div class="col-md-4 col-sm-6">
             <div class="thumbnail">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlmsqAhJrE-lfesLdMptuX4Pn1O55OeS5m-te4QN4rVXnIxbj_" alt="">
+                <img src="<%=pet.image%>" alt="">
                <div class="caption">
-                   <h4>My cute dog</h4>
+                   <h4><%=pet.name%>></h4>
                </div>
                <p>
-                   <a href="/show">More info</a>
+                   <p><%=pet.description%></p>
+                   <a href="/show/">More info</a>
                </p>
             </div>
         </div>
-        <div class="col-md-4 col-sm-6">
-            <div class="thumbnail">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlmsqAhJrE-lfesLdMptuX4Pn1O55OeS5m-te4QN4rVXnIxbj_" alt="">
-               <div class="caption">
-                   <h4>My cute dog</h4>
-               </div>
-               <p>
-                   <a href="/show">More info</a>
-               </p>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
-            <div class="thumbnail">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlmsqAhJrE-lfesLdMptuX4Pn1O55OeS5m-te4QN4rVXnIxbj_" alt="">
-               <div class="caption">
-                   <h4>My cute dog</h4>
-               </div>
-               <p>
-                   <a href="/show">More info</a>
-               </p>
-            </div>
-        </div>
+    <%})%>
     </div>
 
 </div>
