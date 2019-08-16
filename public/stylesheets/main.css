@@ -7,3 +7,6 @@ padding:0;
 text-align: center;
 }
 
+.form-control {
+    max-width: 300px;
+}
