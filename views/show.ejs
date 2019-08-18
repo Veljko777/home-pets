@@ -13,21 +13,27 @@
         </div>
         <div class="col-md-8 mx-auto">
             <div class="thumbnail">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlmsqAhJrE-lfesLdMptuX4Pn1O55OeS5m-te4QN4rVXnIxbj_" alt="">
+                <img src="<%=pet.image%>" alt="">
                 <div class="caption-full">
-                    <h4>Name of pet</h4>
-                    <h6>description</h6>
-                    <p>
-                        е једноставно модел текста који се користи у штампарској и словослагачкој 
-                            индустрији. Lorem ipsum је био стан
-                    </p>
+                    <h4><%=pet.name%></h4>
+                    <h6><%=pet.description%></h6>
+                    
                 </div>
             </div>
         </div>
         <div class="col-md-2">
             <h5>comments</h5>
-            <p>great</p>
-            <p>niceeee</p>
+            <a href="/show/<%=pet._id%>/comments/new">Add a comment</a>
+            <%pet.comments.forEach(function(comment){%>
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong>Veljko</strong>
+                        <span class="pull-right">10 days ago</span>
+                        <p><%=comment.text%></p>
+
+                    </div>
+                </div>
+            <%})%>
         </div>
     </div>
 </div>
