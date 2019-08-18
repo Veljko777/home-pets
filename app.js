@@ -2,6 +2,7 @@ var express= require("express");
 var app=express();
 var mongoose=require("mongoose");
 var bodyParser=require("body-parser");
+var Pets=require("./models/pets")
 
 
 
@@ -21,25 +22,14 @@ app.use(express.static(__dirname + '/public'));
 //LANDING PAGE
 //==============
 app.get("/", function(req,res){
-    var pets=[
-        {
-            name:"Something 1",
-            image:"https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-            description:"This is a great dog"
-        },
-        {
-            name:"Something 2",
-            image:"https://images.pexels.com/photos/6886/dog-puppy-tumblr-puppylove.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-            description:"I love this dog so much!!!!!!!"
-        },
-        {
-            name:"Something 2",
-            image:"https://images.pexels.com/photos/69372/pexels-photo-69372.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-            description:"dog dog dog dog dog dog dog"
-        }
-    ];
-
-    res.render("landing", {pets:pets})
+   Pets.find({}, function(err, pets){
+       if(err){
+           console.log(err)
+       }else{
+        res.render("landing", {pets:pets})
+       }
+   })
+    
 });
 
 //=================
@@ -71,7 +61,22 @@ app.get("/create", function(req,res){
 });
 
 app.post("/",function(req,res){
-    res.send("you tried to add")
+    var name=req.body.name;
+    var image=req.body.image;
+    var description=req.body.description;
+    // var author={
+    //             id:req.user._id,
+    //             username:req.user.username
+    //             };
+    var newPet={name:name, image:image, description:description};
+    Pets.create(newPet, function(err, newCreated){
+        if(err){
+            log("err")
+        } else{
+            res.redirect("/");
+        }
+    });
+
 })
 
 
