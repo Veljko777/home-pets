@@ -1,0 +1,18 @@
+<%include ./partials/header%>
+
+
+<form action="/show/<%=pet._id%>?_method=PUT" method="post">
+    <label for="name">Name</label>
+    <input type="text" name="name" value="<%=pet.name%>">
+    <label for="name">Image</label>
+    <input type="text" name="image" value="<%=pet.image%>">
+    <label for="description">Description</label>
+    <input type="text" name="description" value="<%=pet.description%>">
+    <button>Submit</button>
+    <a href="/show/<%=pet._id%>">Go back</a>
+  
+
+</form>
+
+
+<%include ./partials/footer%>

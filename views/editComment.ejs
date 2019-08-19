@@ -1,0 +1,15 @@
+<%include ./partials/header%>
+
+
+<form action="/show/<%=pet_id%>/comments/<%=comment._id%>?_method=PUT" method="post">
+    
+    <label for="text">Comment</label>
+    <input type="text" name="text" value="<%=comment.text%>">
+    <button>Submit</button>
+    <a href="/show/<%=pet_id%>">Go back</a>
+  
+
+</form> 
+
+
+<%include ./partials/footer%>

@@ -8,6 +8,7 @@ var bodyParser=require("body-parser");
 var Pets=require("./models/pets");
 var Comment=require("./models/comment");
 var User=require("./models/user")
+var methodOverride=require("method-override");
 
 
 mongoose.set("useNewUrlParser", true);
@@ -27,6 +28,7 @@ app.set("view engine", "ejs")
 app.use(express.static(__dirname + '/public'));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(methodOverride("_method"));
 passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -37,7 +39,7 @@ app.use(function(req,res,next){
 })
 
 //============
-//INDEX PAGE
+//INDEX PAGE (show all posts)
 //============
 app.get("/", function(req, res){
     Pets.find({} , function(err, allPets){
@@ -51,8 +53,36 @@ app.get("/", function(req, res){
     
 });
 
+
+//============
+//CREATE POST ROUT
+//============
+
+app.get("/create", isLoggedIn, function(req,res){
+    res.render("create")
+});
+
+app.post("/", function(req,res){
+    var name=req.body.name;
+    var image=req.body.image;
+    var description=req.body.description;
+    var author={
+        id:req.user._id,
+        username:req.user.username
+    };
+    var newPet={name:name, image:image, description:description, author:author}
+    Pets.create(newPet, function(err,newlyCreated){
+        if(err){
+            console.log(err);
+        }else{
+            res.redirect("/")
+        }
+    })
+
+})
+
 //==========
-//SHOW ROUT
+//SHOW ONE POST ROUT
 //==========
 app.get("/show/:id", function(req,res){
     Pets.findById(req.params.id).populate("comments").exec( function(err,foundPet){
@@ -65,27 +95,33 @@ app.get("/show/:id", function(req,res){
     
 });
 
-//============
-//CREATE ROUT
-//============
-
-app.get("/create", isLoggedIn, function(req,res){
-    res.render("create")
+//===============
+//EDIT POST ROUT
+//===============
+app.get("/show/:id/edit", checkPostOwnerships, function(req,res){
+    Pets.findById(req.params.id, function(err,foundPet){
+        res.render("editPost", {pet:foundPet})
+        
+    });
 });
 
-app.post("/", function(req,res){
-    var name=req.body.name;
-    var image=req.body.image;
-    var description=req.body.description;
-    var newPet={name:name, image:image, description:description}
-    Pets.create(newPet, function(err,newlyCreated){
-        if(err){
-            console.log(err);
-        }else{
-            res.redirect("/")
-        }
+//================
+//UPDATE POST ROUT
+//================
+app.put("/show/:id", checkPostOwnerships,  function(req,res){
+    var data={name:req.body.name, image:req.body.image, description:req.body.description};
+    Pets.findByIdAndUpdate(req.params.id, data, function(err, updatePet){
+        res.redirect("/show/"+req.params.id)
     })
+})
 
+//===============
+//DELETE POST ROUT
+//===============
+app.delete("/show/:id", checkPostOwnerships, function(req,res){
+    Pets.findByIdAndRemove(req.params.id, function(err){
+        res.redirect("/");
+    })
 })
 
 //=============
@@ -109,6 +145,8 @@ app.post("/register", function(req,res){
     });
 });
 
+
+
 //============
 //LOGIN ROUT
 //============
@@ -122,6 +160,8 @@ app.post("/login", passport.authenticate("local", {
 }), function(req,res){
 });
 
+
+
 //============
 //LOGOUT ROUT
 //============
@@ -129,6 +169,8 @@ app.get("/logout", function(req,res){
     req.logout();
     res.redirect("/")
 })
+
+
 
 //=============
 //COMMENT ROUT
@@ -149,8 +191,8 @@ app.post("/show/:id/comments", isLoggedIn, function(req,res){
             console.log(err);
         } else{
             var text=req.body.text;
-            var writer=req.body.writer;
-            var newComment={text:text, writer:writer};
+            var author={id:req.user._id, username:req.user.username}
+            var newComment={text:text, author:author};
             Comment.create(newComment, function(err,comment){
                 if(err){
                     console.log(err);
@@ -163,12 +205,79 @@ app.post("/show/:id/comments", isLoggedIn, function(req,res){
         }
     })
 })
+//==================
+//EDIT COMMENT ROUT
+//===================
+app.get("/show/:id/comments/:comment_id/edit", checkCommentOwnerships, function(req,res){
+    Comment.findById(req.params.comment_id, function(err,foundComment){
+        res.render("editComment", {pet_id:req.params.id, comment:foundComment})
+    })
+   
+})
 
+app.put("/show/:id/comments/:comment_id", checkCommentOwnerships, function(req,res){
+    var text=req.body.text
+    var editedComment={text:text};
+    Comment.findByIdAndUpdate(req.params.comment_id, editedComment, function(err, updatedComment){
+        res.redirect("/show/"+req.params.id)
+    })
+})
+
+//===================
+//DELETE COMMENT ROUT
+//===================
+app.delete("/show/:id/comments/:comment_id", checkCommentOwnerships, function(req,res){
+    Comment.findByIdAndRemove(req.params.comment_id, function(err){
+        res.redirect("/show/"+req.params.id);
+    })
+})
 
 
 //===========
-//MIDDLEWERE
+//MIDDLEWARE
 //===========
+function checkPostOwnerships(req,res,next){
+    if(req.isAuthenticated()){
+        Pets.findById(req.params.id, function(err, foundPet){
+            if(err){
+                console.log(err);
+            }else{
+                if(!foundPet){
+                    return res.redirect("back");
+                }
+                if(foundPet.author.id.equals(req.user._id)){
+                    next()
+                }else{
+                    res.redirect("back")
+                }
+            }
+        })
+    }else{
+        res.redirect("back")
+    }
+};
+
+function checkCommentOwnerships(req,res,next){
+    if(req.isAuthenticated()){
+        Comment.findById(req.params.comment_id,function(err,foundComment){
+            if(err){
+                console.log(err)
+            }else{
+                if(!foundComment){
+                    return res.redirect("back")
+                }if(foundComment.author.id.equals(req.user._id)){
+                    next()
+                }else{
+                    res.redirect("back")
+                }
+            }
+        })
+    }else{
+        res.redirect("back")
+    }
+}
+
+
 function isLoggedIn(req,res,next){
     if(req.isAuthenticated()){
         return next();
