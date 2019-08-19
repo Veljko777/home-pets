@@ -25,15 +25,10 @@
             <h5>comments</h5>
             <a href="/show/<%=pet._id%>/comments/new">Add a comment</a>
             <%pet.comments.forEach(function(comment){%>
-                <div class="row">
-                    <div class="col-md-12">
-                        <strong>Veljko</strong>
-                        <span class="pull-right">10 days ago</span>
-                        <p><%=comment.text%></p>
+            <h5><%=comment.writer%></h5>
+            <p><%=comment.text%></p>
 
-                    </div>
-                </div>
-            <%})%>
+            <%});%>
         </div>
     </div>
 </div>

@@ -1,3 +1,30 @@
+body{
+    background-color: rgb(226, 236, 199);
+}
+
+#navbar{
+    background-color: rgb(57, 192, 52);
+}
+
+#jumbotron {
+ background-color: rgb(162, 216, 62);
+}
+
+.login{
+    margin: 20px auto; 
+    width:400px;
+    margin-top:20px;
+    padding:20px;
+    text-align: center;
+    
+}
+
+.login input{
+
+    margin: 5px auto;
+}
+
+
 .thumbnail img{
 width:100%;
 

@@ -1,10 +1,10 @@
 <%include ./partials/header%>
 
-<form action="/show/<%=pet._id%>" method="post">
-    <label for="name">Name</label>
-    <input type="text" name="author" placeholder="name">
+<form action="/show/<%=pet._id%>/comments" method="post">
+    <label for="writer">Name</label>
+    <input type="text" name="writer" placeholder="name">
     <br>
-    <label for="description">Comment</label>
+    <label for="text">Comment</label>
     <input type="text" name="text" placeholder="Comment">
     <button>Submit</button>
     <a href="/show/<%=pet._id%>">Go back</a>
