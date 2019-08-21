@@ -7,43 +7,51 @@
     <title>Home Pets</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/stylesheets/main.css">
+    
 </head>
 <body>
+    <div class="wrapper">
     <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
-            <a class="navbar-brand" href="/"><i class="fa fa-paw"></i> Home Pets</a>
+            <a class="navbar-brand" href="/"><i class="fa fa-paw fa-lg"></i> <strong>HOME PETS</strong></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/show">show</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Dogs</a>
-                    <a class="dropdown-item" href="#">Cats</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
+                <div class="container">
+                    <ul class="navbar-nav mr-auto">
                 
-                </ul>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <strong>SHOW</strong>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Dogs</a>
+                        <a class="dropdown-item" href="#">Cats</a>
+                        <a class="dropdown-item" href="#">Rabbits</a>
+                        <a class="dropdown-item" href="#">Parrots</a>
+                        <a class="dropdown-item" href="#">Other</a>
+                        </div>
+                    </li>
+                    
+                    </ul>
+                </div>
                 <ul class="nav navbar-nav navbar-right" >
                    <% if(!currentUser){%>
-                    <li class="pr-3"><a href="/login">Login </a></li>
-                    <li class="pr-3"><a href="/register"> Register</a></li>
+                    <li class="pr-3"><a class="btn btn-outline-light" href="/login">Login </a></li>
+                    
                     <%} else{%>
-                    <li class="pr-3"><a href="#">Signed in as <%=currentUser.username%></a></li>
-                    <li class=""><a href="/logout"> Log out</a></li>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <%=currentUser.username%>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Profile</a>
+                                <a class="dropdown-item" href="/logout"> Log out</a>
+                            </div>
+                        </div>
                     <%}%>
                 </ul>
             </div>

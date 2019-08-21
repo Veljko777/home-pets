@@ -9,6 +9,7 @@ var Pets=require("./models/pets");
 var Comment=require("./models/comment");
 var User=require("./models/user")
 var methodOverride=require("method-override");
+var images={image:"/public/images/cat-2489845_960_720.jpg"}
 
 
 mongoose.set("useNewUrlParser", true);
@@ -64,13 +65,15 @@ app.get("/create", isLoggedIn, function(req,res){
 
 app.post("/", function(req,res){
     var name=req.body.name;
+    var species=req.body.species;
+    var breed=req.body.breed;
     var image=req.body.image;
     var description=req.body.description;
     var author={
         id:req.user._id,
         username:req.user.username
     };
-    var newPet={name:name, image:image, description:description, author:author}
+    var newPet={name:name, species:species, breed:breed, image:image, description:description, author:author}
     Pets.create(newPet, function(err,newlyCreated){
         if(err){
             console.log(err);
@@ -124,34 +127,13 @@ app.delete("/show/:id", checkPostOwnerships, function(req,res){
     })
 })
 
-//=============
-//REGISTER ROUT
-//=============
-app.get("/register", function(req, res){
-    res.render("register");
-});
-
-app.post("/register", function(req,res){
-    var newUser=new User({username:req.body.username})
-    User.register(newUser, req.body.password, function(err, newUser){
-        if(err){
-            console.log(err);
-            res.render("register")
-        }else{
-            passport.authenticate("local")(req,res,function(){
-                res.redirect("/");
-            });
-        }
-    });
-});
-
 
 
 //============
 //LOGIN ROUT
 //============
 app.get("/login", function(req,res){
-    res.render("login");
+    res.render("login",{images:images});
 });
 
 app.post("/login", passport.authenticate("local", {
@@ -170,6 +152,23 @@ app.get("/logout", function(req,res){
     res.redirect("/")
 })
 
+//=============
+//REGISTER ROUT
+//=============
+
+app.post("/register", function(req,res){
+    var newUser=new User({username:req.body.username, email:req.body.email})
+    User.register(newUser, req.body.password, function(err, newUser){
+        if(err){
+            console.log(err);
+            res.render("login")
+        }else{
+            passport.authenticate("local")(req,res,function(){
+                res.redirect("/");
+            });
+        }
+    });
+});
 
 
 //=============

@@ -1,6 +1,8 @@
 var mongoose=require("mongoose");
 var petSchema=new mongoose.Schema({
     name: String,
+    species:String,
+    breed:String,
     image:String,
     description:String,
     author:{

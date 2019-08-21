@@ -1,32 +1,39 @@
 <%include ./partials/header%>
 
 <div class="container">
-    <div class="jumbotron" id="jumbotron">
-            <h1 class="display-4">Show us your sweetest pet</h1>
-            <p class="lead">This site is for pet lovers to show everyone how CUTE their pet is!!!</p>
-            <hr class="my-4">
-            <p>Show us your pet</p>
-            <a class="btn btn-primary btn-lg" href="/create" role="button">Create post</a>
+    <div class="jumbotron p-1 mb-2 " id="jumbotron">
+            <div class=" text-center mt-2">
+                    <h2 >This site is for pet lovers to show everyone how CUTE their pet is!!!</h1>
+            </div>
+            
+            <div class="text-left mb-2 ml-4 mt-4">
+                    <h5>Show us your pet</h5>
+                    <a class="btn  btn-primary btn-lg mb-1" href="/create" role="button">Create post</a>
+            </div>
+            
     </div>
 </div>
 
-<div class="container" >
-    <h3>Top 10 most cutest pets</h3>
-    <div class="row" >
-       <% pets.forEach(function(pet){%>
-        <div class="col-md-4 col-sm-6" >
-            <div class="thumbnail" >
-                <img src="<%=pet.image%>" alt="">
-               <div class="caption">
-                   <h4><%=pet.name%></h4>
-               </div>
-               <p>
-                   <p><%=pet.description%></p>
-                   <a href="/show/<%=pet._id%>">More info</a>
-               </p>
+
+<div class="container text-center" >
+    <div class="mt-3">
+        <h3 class="pb-1">Most <i class="fa fa-heart logo"></i> pets at the moment:</h3>
+        <hr class="mb-4">
+        <div class="row" >
+        <% pets.forEach(function(pet){%>
+            <div class="col-md-4 col-sm-6" >
+                <div class="thumbnail " >
+                    <img class="rounded" src="<%=pet.image%>" alt="">
+                <div class="caption">
+                    <h4><%=pet.name%></h4>
+                </div>
+                <p>
+                    <a href="/show/<%=pet._id%>">More info</a>
+                </p>
+                </div>
             </div>
+        <%})%>
         </div>
-    <%})%>
     </div>
 
 </div>

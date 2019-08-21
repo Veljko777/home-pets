@@ -1,29 +1,91 @@
-body{
-    background-color: rgb(226, 236, 199);
+html{
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
+body{
+    background-color: rgb(226, 236, 199);
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Crimson Text', serif;
+}
+.wrapper {
+min-height: 100%;
+position: relative;
+}
 #navbar{
-    background-color: rgb(57, 192, 52);
+    background: #65e043;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to bottom, #1a740e, #65e043);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to bottom, #1a740e, #65e043); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+.logo{
+    
+    color: red;
 }
 
 #jumbotron {
- background-color: rgb(162, 216, 62);
+    background: #65e043;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #1a740e, #65e043);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #1a740e, #65e043); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+#jumbotron h2{
+ 
 }
 
-.login{
+#navbarDropdown {
+    font-size: 18px;
+   
+    
+}
+
+.dropdown-item:hover {
+    background-color:#65e043;
+    transition-duration: 0.5s;
+}
+
+.dropdown-menu {
+    background: #65e043;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #1a740e, #65e043);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #1a740e, #65e043); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+
+
+.register{
     margin: 20px auto; 
     width:400px;
     margin-top:20px;
     padding:20px;
     text-align: center;
+    float: right;
     
 }
 
-.login input{
+.register input{
 
     margin: 5px auto;
 }
+.register label{
+    color:rgb(57, 192, 52);
+}
+.register h3 {
+    color:rgb(57, 192, 52);
+}
 
+
+.login{
+    text-align: end;
+    float: right;
+}
+.login label{
+    color:rgb(57, 192, 52);
+   
+}
 
 .thumbnail img{
 width:100%;
@@ -38,4 +100,32 @@ text-align: center;
 
 .form-control {
     max-width: 300px;
+}
+
+
+.create{
+    color:rgb(57, 192, 52);
+    
+    margin-bottom:0;
+}
+
+
+
+.footer {
+   
+    position: absolute;
+    height: 50px;
+    width: 100%;
+    background-color: rgb(226, 236, 199);
+   
+}
+.footer p{
+    text-align: center;
+   
+}
+
+.login_background{
+    background-image: url("/images/pups-1.jpg");
+    background-repeat: no-repeat;
+    background-size: cover; 
 }
