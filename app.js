@@ -112,7 +112,7 @@ app.get("/show/:id/edit", checkPostOwnerships, function(req,res){
 //UPDATE POST ROUT
 //================
 app.put("/show/:id", checkPostOwnerships,  function(req,res){
-    var data={name:req.body.name, image:req.body.image, description:req.body.description};
+    var data={name:req.body.name, species:req.body.species, breed:req.body.breed, image:req.body.image, description:req.body.description};
     Pets.findByIdAndUpdate(req.params.id, data, function(err, updatePet){
         res.redirect("/show/"+req.params.id)
     })
@@ -172,18 +172,8 @@ app.post("/register", function(req,res){
 
 
 //=============
-//COMMENT ROUT
+//COMMENT
 //=============
-app.get("/show/:id/comments/new",isLoggedIn, function(req,res){
-    Pets.findById(req.params.id, function(err,addComment){
-        if(err){
-            console.log(err)
-        } else{
-            res.render("newComment", {pet:addComment})
-        }
-    })
-})
-
 app.post("/show/:id/comments", isLoggedIn, function(req,res){
     Pets.findById(req.params.id, function(err,pet){
         if(err){

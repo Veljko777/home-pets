@@ -22,9 +22,10 @@
         <div class="row" >
         <% pets.forEach(function(pet){%>
             <div class="col-md-4 col-sm-6" >
-                <div class="thumbnail " >
-                    <img class="rounded" src="<%=pet.image%>" alt="">
-                <div class="caption">
+                <div class="thumbnail img-hover-zoom thumbnail_landing_size" >
+                    <a href="/show/<%=pet._id%>">
+                        <img class="rounded" src="<%=pet.image%>" alt=""></a>
+                <div class="caption mt-2">
                     <h4><%=pet.name%></h4>
                 </div>
                 <p>

@@ -1,15 +1,19 @@
 <%include ./partials/header%>
 
 
-<form action="/show/<%=pet_id%>/comments/<%=comment._id%>?_method=PUT" method="post">
-    
-    <label for="text">Comment</label>
-    <input type="text" name="text" value="<%=comment.text%>">
-    <button>Submit</button>
-    <a href="/show/<%=pet_id%>">Go back</a>
-  
+    <div class="edit_comment">
+            <label for="text">Edit comment:</label>
+            <form action="/show/<%=pet_id%>/comments/<%=comment._id%>?_method=PUT" method="post">
+                <textarea name="text" type="text" id="" cols="50" rows="5"><%=comment.text%></textarea>
+                <button class="btn btn-primary mb-5">Submit</button>
+                <a class="btn btn-light mb-5" href="/show/<%=pet_id%>">Go back</a>
+              
+            
+            </form> 
+    </div>
+        
 
-</form> 
+
 
 
 <%include ./partials/footer%>
