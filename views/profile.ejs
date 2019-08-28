@@ -1,0 +1,22 @@
+<%include ./partials/header%>
+
+<h1>PROFILE PAGE</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+               <h3><%=user.firstname%> <%=user.lastname%></h3>
+                <img src="<%=user.picture%>" width="200px" height="200px" alt="">
+        </div>
+        <div class="col-md-7">
+
+        </div>
+        <div class="col-md-2">
+                <a href="/profile/<%=currentUser._id%>/edit">Edit Profile</a>
+        </div>
+    </div>
+
+</div>
+
+
+
+<%include ./partials/footer%>

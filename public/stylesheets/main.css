@@ -54,7 +54,7 @@ background: linear-gradient(to bottom, #1a740e, #65e043); /* W3C, IE 10+/ Edge, 
     transition: transform .5s ease;
   }
 
-.img-hover-zoom:hover img {
+.img-hover-zoom img:hover {
     transform: scale(1.05);}
 
 

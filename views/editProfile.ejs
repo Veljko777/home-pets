@@ -1,0 +1,18 @@
+<%include ./partials/header%>
+
+<div class="container">
+    <form action="/profile/<%=user._id%>?_method=PUT" method="POST">
+        <input type="text" name="picture" value="<%=user.picture%>">
+        <input type="text" name="username" value="<%=user.username%>">
+        <input type="text" name="email" value="<%=user.email%>">
+        
+        <input type="text" name="firstname" value="<%=user.firstname%>">
+        <input type="text" name="lastname" value="<%=user.lastname%>">
+        <button>Submit</button>
+    </form>
+</div>
+
+
+
+
+<%include ./partials/footer%>

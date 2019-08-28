@@ -39,9 +39,9 @@ app.use(function(req,res,next){
     next();
 })
 
-//============
+//=================================
 //INDEX PAGE (show all posts)
-//============
+//=================================
 app.get("/", function(req, res){
     Pets.find({} , function(err, allPets){
         
@@ -55,9 +55,9 @@ app.get("/", function(req, res){
 });
 
 
-//============
+//=================================
 //CREATE POST ROUT
-//============
+//=================================
 
 app.get("/create", isLoggedIn, function(req,res){
     res.render("create")
@@ -84,9 +84,9 @@ app.post("/", function(req,res){
 
 })
 
-//==========
+//=================================
 //SHOW ONE POST ROUT
-//==========
+//=================================
 app.get("/show/:id", function(req,res){
     Pets.findById(req.params.id).populate("comments").exec( function(err,foundPet){
         if(err){
@@ -98,9 +98,9 @@ app.get("/show/:id", function(req,res){
     
 });
 
-//===============
+//=================================
 //EDIT POST ROUT
-//===============
+//=================================
 app.get("/show/:id/edit", checkPostOwnerships, function(req,res){
     Pets.findById(req.params.id, function(err,foundPet){
         res.render("editPost", {pet:foundPet})
@@ -108,9 +108,9 @@ app.get("/show/:id/edit", checkPostOwnerships, function(req,res){
     });
 });
 
-//================
+//=================================
 //UPDATE POST ROUT
-//================
+//=================================
 app.put("/show/:id", checkPostOwnerships,  function(req,res){
     var data={name:req.body.name, species:req.body.species, breed:req.body.breed, image:req.body.image, description:req.body.description};
     Pets.findByIdAndUpdate(req.params.id, data, function(err, updatePet){
@@ -118,9 +118,9 @@ app.put("/show/:id", checkPostOwnerships,  function(req,res){
     })
 })
 
-//===============
+//=================================
 //DELETE POST ROUT
-//===============
+//=================================
 app.delete("/show/:id", checkPostOwnerships, function(req,res){
     Pets.findByIdAndRemove(req.params.id, function(err){
         res.redirect("/");
@@ -129,9 +129,9 @@ app.delete("/show/:id", checkPostOwnerships, function(req,res){
 
 
 
-//============
+//=================================
 //LOGIN ROUT
-//============
+//=================================
 app.get("/login", function(req,res){
     res.render("login",{images:images});
 });
@@ -144,20 +144,20 @@ app.post("/login", passport.authenticate("local", {
 
 
 
-//============
+//=================================
 //LOGOUT ROUT
-//============
+//=================================
 app.get("/logout", function(req,res){
     req.logout();
     res.redirect("/")
 })
 
-//=============
+//=================================
 //REGISTER ROUT
-//=============
+//=================================
 
 app.post("/register", function(req,res){
-    var newUser=new User({username:req.body.username, email:req.body.email})
+    var newUser=new User({username:req.body.username, email:req.body.email, picture:"",firstname:"", lastname:""})
     User.register(newUser, req.body.password, function(err, newUser){
         if(err){
             console.log(err);
@@ -171,9 +171,9 @@ app.post("/register", function(req,res){
 });
 
 
-//=============
+//=================================
 //COMMENT
-//=============
+//=================================
 app.post("/show/:id/comments", isLoggedIn, function(req,res){
     Pets.findById(req.params.id, function(err,pet){
         if(err){
@@ -194,9 +194,9 @@ app.post("/show/:id/comments", isLoggedIn, function(req,res){
         }
     })
 })
-//==================
+//=================================
 //EDIT COMMENT ROUT
-//===================
+//=================================
 app.get("/show/:id/comments/:comment_id/edit", checkCommentOwnerships, function(req,res){
     Comment.findById(req.params.comment_id, function(err,foundComment){
         res.render("editComment", {pet_id:req.params.id, comment:foundComment})
@@ -212,19 +212,52 @@ app.put("/show/:id/comments/:comment_id", checkCommentOwnerships, function(req,r
     })
 })
 
-//===================
+//=================================
 //DELETE COMMENT ROUT
-//===================
+//=================================
 app.delete("/show/:id/comments/:comment_id", checkCommentOwnerships, function(req,res){
     Comment.findByIdAndRemove(req.params.comment_id, function(err){
         res.redirect("/show/"+req.params.id);
     })
 })
 
+//=================================
+//PROFILE ROUT
+//=================================
+app.get("/profile/:user_id", checkProfileOwnerships, function(req,res){
+    User.findById(req.params.user_id, function(err, foundUser){
+        res.render("profile", {user:foundUser})
+        
+    })
+})
 
-//===========
+
+
+app.get("/profile/:user_id/edit",checkProfileOwnerships, function(req,res){
+    User.findById(req.params.user_id, function(err,foundUser){
+        
+        res.render("editProfile", {user:foundUser})
+
+    })
+})
+
+app.put("/profile/:user_id", checkProfileOwnerships, function(req,res){
+    
+    var email=req.body.email;
+    var picture=req.body.picture;
+    var firstname=req.body.firstname;
+    var lastname=req.body.lastname;
+    var userdata={ email:email, picture:picture, firstname:firstname, lastname:lastname}
+    User.findByIdAndUpdate(req.params.user_id, userdata, function(err, updatedUser){
+        res.redirect("/profile/"+ req.params.user_id)
+    })        
+})
+
+
+
+//=================================
 //MIDDLEWARE
-//===========
+//=================================
 function checkPostOwnerships(req,res,next){
     if(req.isAuthenticated()){
         Pets.findById(req.params.id, function(err, foundPet){
@@ -245,6 +278,26 @@ function checkPostOwnerships(req,res,next){
         res.redirect("back")
     }
 };
+
+function checkProfileOwnerships(req,res,next){
+    if(req.isAuthenticated()){
+        User.findById(req.params.user_id, function(err, foundUser){
+            if(err){
+                console.log(err)
+            }else{
+                if(!foundUser){
+                    return res.redirect("back")
+                }if(foundUser._id.equals(req.user._id)){
+                    next()
+                }else{
+                    res.redirect("back")
+                }
+            }
+        })
+    }else{
+        res.redirect("back")
+    }
+}
 
 function checkCommentOwnerships(req,res,next){
     if(req.isAuthenticated()){
@@ -275,6 +328,6 @@ function isLoggedIn(req,res,next){
     
 }
 
-app.listen(3001, function(){
+app.listen(3000, function(){
     console.log("SERVER STARTED")
 });
