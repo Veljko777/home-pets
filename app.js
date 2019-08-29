@@ -54,34 +54,135 @@ app.get("/", function(req, res){
     
 });
 
+app.get("/dogs", function(req,res){
+    Pets.find({species:"Dog"}, function(err, allDogs){
+        if(err){
+            console.log(err)
+        }else{
+            res.render("dogs", {dogs:allDogs})
+            
+        }
+    })
+})
+app.get("/cats", function(req,res){
+    Pets.find({species:"Cat"}, function(err, allCats){
+        if(err){
+            console.log(err)
+        }else{
+            res.render("cats", {cats:allCats})
+            
+        }
+    })
+})
+app.get("/rabbits", function(req,res){
+    Pets.find({species:"Rabbit"}, function(err, allRabbits){
+        if(err){
+            console.log(err)
+        }else{
+            res.render("rabbits", {rabbits:allRabbits})
+            
+        }
+    })
+})
+app.get("/parrots", function(req,res){
+    Pets.find({species:"Parrot"}, function(err, allParrots){
+        if(err){
+            console.log(err)
+        }else{
+            res.render("parrots", {parrots:allParrots})
+            
+        }
+    })
+})
+app.get("/other", function(req,res){
+    Pets.find({species:"Other"}, function(err, allOther){
+        if(err){
+            console.log(err)
+        }else{
+            res.render("other", {others:allOther})
+            
+        }
+    })
+})
+
+//=================================
+//PROFILE ROUT
+//=================================
+app.get("/profile/:user_id", function(req,res){
+    User.findById(req.params.user_id).populate("pets").exec( function(err, foundUser){
+        if(err){
+            console.log(err)
+        }else{
+            res.render("profile", {user:foundUser})
+        }
+        
+        
+    })
+})
+
+
+
+app.get("/profile/:user_id/edit",checkProfileOwnerships, function(req,res){
+    User.findById(req.params.user_id, function(err,foundUser){
+        res.render("editProfile", {user:foundUser})
+    })
+})
+
+
+app.put("/profile/:user_id", checkProfileOwnerships, function(req,res){
+    
+    var email=req.body.email;
+    var picture=req.body.picture;
+    var firstname=req.body.firstname;
+    var lastname=req.body.lastname;
+    var userdata={ email:email, picture:picture, firstname:firstname, lastname:lastname}
+    User.findByIdAndUpdate(req.params.user_id, userdata, function(err, updatedUser){
+        res.redirect("/profile/"+ req.params.user_id)
+    })        
+})
+
 
 //=================================
 //CREATE POST ROUT
 //=================================
 
-app.get("/create", isLoggedIn, function(req,res){
-    res.render("create")
-});
-
-app.post("/", function(req,res){
-    var name=req.body.name;
-    var species=req.body.species;
-    var breed=req.body.breed;
-    var image=req.body.image;
-    var description=req.body.description;
-    var author={
-        id:req.user._id,
-        username:req.user.username
-    };
-    var newPet={name:name, species:species, breed:breed, image:image, description:description, author:author}
-    Pets.create(newPet, function(err,newlyCreated){
+app.get("/profile/:user_id/create", checkProfileOwnerships, function(req,res){
+    User.findById(req.params.user_id, function(err, user){
         if(err){
-            console.log(err);
+            console.log(err)
         }else{
-            res.redirect("/")
+            res.render("create", {user:user})
         }
     })
+    
+});
 
+app.post("/profile/:user_id/pets", checkProfileOwnerships, function(req,res){
+    User.findById(req.params.user_id, function(err, user){
+        if(err){
+            console.log(err)
+        } else{
+            var name=req.body.name;
+            var species=req.body.species;
+            var breed=req.body.breed;
+            var image=req.body.image;
+            var description=req.body.description;
+            var author={
+                id:req.user._id,
+                username:req.user.username
+            };
+            var newPet={name:name, species:species, breed:breed, image:image, description:description, author:author}
+            Pets.create(newPet, function(err,pet){
+                if(err){
+                    console.log(err);
+                }else{
+                    user.pets.push(pet)
+                    user.save()
+                    res.redirect("/profile/"+ req.params.user_id)
+                }
+                })
+            }
+})
 })
 
 //=================================
@@ -176,6 +277,7 @@ app.post("/register", function(req,res){
 //=================================
 app.post("/show/:id/comments", isLoggedIn, function(req,res){
     Pets.findById(req.params.id, function(err,pet){
+
         if(err){
             console.log(err);
         } else{
@@ -221,37 +323,7 @@ app.delete("/show/:id/comments/:comment_id", checkCommentOwnerships, function(re
     })
 })
 
-//=================================
-//PROFILE ROUT
-//=================================
-app.get("/profile/:user_id", checkProfileOwnerships, function(req,res){
-    User.findById(req.params.user_id, function(err, foundUser){
-        res.render("profile", {user:foundUser})
-        
-    })
-})
 
-
-
-app.get("/profile/:user_id/edit",checkProfileOwnerships, function(req,res){
-    User.findById(req.params.user_id, function(err,foundUser){
-        
-        res.render("editProfile", {user:foundUser})
-
-    })
-})
-
-app.put("/profile/:user_id", checkProfileOwnerships, function(req,res){
-    
-    var email=req.body.email;
-    var picture=req.body.picture;
-    var firstname=req.body.firstname;
-    var lastname=req.body.lastname;
-    var userdata={ email:email, picture:picture, firstname:firstname, lastname:lastname}
-    User.findByIdAndUpdate(req.params.user_id, userdata, function(err, updatedUser){
-        res.redirect("/profile/"+ req.params.user_id)
-    })        
-})
 
 
 

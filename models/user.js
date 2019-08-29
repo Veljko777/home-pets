@@ -6,7 +6,11 @@ var UserSchema=new mongoose.Schema({
     password:String,
     picture:String,
     firstname:String,
-    lastname:String
+    lastname:String,
+    pets:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Pets"
+    }]
     
 });
 UserSchema.plugin(passportLocalMongoose);

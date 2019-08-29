@@ -8,10 +8,24 @@
                 <img src="<%=user.picture%>" width="200px" height="200px" alt="">
         </div>
         <div class="col-md-7">
-
+            <a href="/profile/<%=user._id%>/create">Create Post</a>
+            <% user.pets.forEach(function(pet){%>
+                <div class="col-md-4 col-sm-6" >
+                    <div class="thumbnail img-hover-zoom " >
+                        <a href="/show/<%=pet._id%>">
+                            <img class="rounded" src="<%=pet.image%>" width="auto" alt=""></a>
+                    <div class="caption mt-2">
+                        <h4><%=pet.name%></h4>
+                    </div>
+                    <p>
+                        <a href="/show/<%=pet._id%>">More info</a>
+                    </p>
+                    </div>
+                </div>
+            <%})%>
         </div>
         <div class="col-md-2">
-                <a href="/profile/<%=currentUser._id%>/edit">Edit Profile</a>
+                <a href="/profile/<%=user._id%>/edit">Edit Profile</a>
         </div>
     </div>
 

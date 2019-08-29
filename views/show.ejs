@@ -2,13 +2,13 @@
 
 <div class="container mt-3">
     <div class="row">
-        <div class="col-md-1">
+        <div class="col-md-1 ml-0 pl-0">
             <ul>
-                <li>link1</li>
-                <li>link2</li>
-                <li>link3</li>
-                <li>link4</li>
-                <li>link5</li>
+                <li><a href="/dogs">DOGS</a></li>
+                <li><a href="/cats">CATS</a></li>
+                <li><a href="/rabbits">RABBITS</a></li>
+                <li><a href="/parrots">PARROTS</a></li>
+                <li><a href="/other">OTHER</a></li>
             </ul>
             <a href="/">Go back</a>
         </div>
@@ -25,11 +25,8 @@
                     <%}%>
                 </div>
                 <div class="caption-full">
-                   
-                    
                     <h6><%=pet.description%></h6>
-                    <h5>Created by <a href="#"><%=pet.author.username%></a></h5>
-                    
+                    <h5>Created by <a href="/profile/<%=pet.author.id%>"><%=pet.author.username%></a></h5>
                 </div>
             </div>
         </div>
@@ -40,7 +37,7 @@
                     <%pet.comments.forEach(function(comment){%>
                     <div class="row">
                         <div class="col-md-10 pt-1">
-                            <a href="#"><%=comment.author.username%></a>
+                            <a href="/profile/<%=comment.author.id%>"><%=comment.author.username%></a>
                         </div>
                         <div class="col-md-1 m-0 p-0">
                             <%if(currentUser && comment.author.id.equals(currentUser._id)){%>                               
