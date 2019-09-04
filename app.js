@@ -8,6 +8,7 @@ var bodyParser=require("body-parser");
 var Pets=require("./models/pets");
 var Comment=require("./models/comment");
 var User=require("./models/user")
+var Like=require("./models/likes")
 var methodOverride=require("method-override");
 var images={image:"/public/images/cat-2489845_960_720.jpg"}
 
@@ -38,6 +39,8 @@ app.use(function(req,res,next){
     res.locals.currentUser=req.user;
     next();
 })
+
+
 
 //=================================
 //INDEX PAGE (show all posts)
@@ -189,7 +192,7 @@ app.post("/profile/:user_id/pets", checkProfileOwnerships, function(req,res){
 //SHOW ONE POST ROUT
 //=================================
 app.get("/show/:id", function(req,res){
-    Pets.findById(req.params.id).populate("comments").exec( function(err,foundPet){
+    Pets.findById(req.params.id).populate("comments").populate("likes").exec( function(err,foundPet){
         if(err){
             console.log(err)
         } else{
@@ -225,6 +228,42 @@ app.put("/show/:id", checkPostOwnerships,  function(req,res){
 app.delete("/show/:id", checkPostOwnerships, function(req,res){
     Pets.findByIdAndRemove(req.params.id, function(err){
         res.redirect("/");
+    })
+})
+
+//=================================
+//LIKES
+//=================================
+app.post("/show/:id/like", isLoggedIn, function(req,res){
+    Pets.findById(req.params.id).populate("likes").exec( function(err,pet){
+        if(err){
+            console.log(err);
+        }else{
+            var currentUser=req.user.username;
+            var found=false;
+            pet.likes.forEach(function(like){
+                if(like.author.username===currentUser){
+                    found=true
+                } 
+            })
+            if(found===false){
+                var author={
+                    id:req.user._id,
+                    username:req.user.username}
+                var newLike={author:author}
+                Like.create(newLike, function(err, like){
+                    if(err){
+                        console.log(err)
+                    }else{
+                        pet.likes.push(like);
+                        pet.save();
+                        res.redirect("back") 
+                    }
+                }) 
+            }else{
+                res.redirect("back")
+            }
+        }
     })
 })
 
@@ -351,6 +390,16 @@ function checkPostOwnerships(req,res,next){
     }
 };
 
+function checkIfLiked(req,res,next){
+    Pets.findById(req.params.pet_id, function(err, foundPet){
+            foundPet.likes.find({}, function(err, foundLike){
+                console.log(foundLike)
+            })
+            
+        })
+    
+}
+
 function checkProfileOwnerships(req,res,next){
     if(req.isAuthenticated()){
         User.findById(req.params.user_id, function(err, foundUser){
@@ -399,6 +448,8 @@ function isLoggedIn(req,res,next){
     res.redirect("/login");
     
 }
+
+
 
 app.listen(3000, function(){
     console.log("SERVER STARTED")

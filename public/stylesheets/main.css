@@ -44,11 +44,15 @@ background: linear-gradient(to bottom, #1a740e, #65e043); /* W3C, IE 10+/ Edge, 
     transition-duration: 0.5s;
 }
 
-.dropdown-menu {
+.dropdownNavbar {
     background: #65e043;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to bottom, #1a740e, #65e043);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to bottom, #1a740e, #65e043); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
+}
+
+.dropdownLikes{
+    background:rgb(226, 236, 199);
 }
 .img-hover-zoom img {
     transition: transform .5s ease;

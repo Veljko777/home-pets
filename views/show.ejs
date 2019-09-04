@@ -15,6 +15,7 @@
         <div class="col-md-8 mx-auto ">
             <div class="thumbnail ">
                 <h4><%=pet.name%></h4>
+                <h5>Created by <a href="/profile/<%=pet.author.id%>"><%=pet.author.username%></a></h5>
                 <div id="show_pet_image">
                     <img src="<%=pet.image%>" alt="">
                     <%if(currentUser && pet.author.id.equals(currentUser._id)){%>
@@ -24,10 +25,30 @@
                         </form>
                     <%}%>
                 </div>
-                <div class="caption-full">
-                    <h6><%=pet.description%></h6>
-                    <h5>Created by <a href="/profile/<%=pet.author.id%>"><%=pet.author.username%></a></h5>
+                <div >
+                    
+                    <div class="dropdown text-center">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <%=pet.likes.length%> likes
+                        </button>
+                        <div class="dropdown-menu dropdownLikes"  aria-labelledby="dropdownMenuButton">
+                            <% pet.likes.forEach(function(like){%>
+                                <a class="pr-1 pl-1" href="/profile/<%=like.author.id%>"><%=like.author.username%>, </a>
+                            <%})%> 
+                        </div>
+                    </div>
+                    <%if(!currentUser ){%>
+                        <h6><%=pet.description%></h6>
+                    <%}else{%>
+                        <div class="text-right">
+                            <form action="/show/<%=pet._id%>/like" method="post">
+                                <button class="btn btn-lg btn-primary pt-0 pb-0 pl-4 pr-4 mt-1 "><i id="like" class="fa fa-heart" ></i></button>
+                            </form>
+                        </div>
+                        <h6><%=pet.description%></h6>
+                    <%}%>
                 </div>
+                
             </div>
         </div>
         <div class="col-md-3">

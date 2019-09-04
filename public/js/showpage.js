@@ -10,3 +10,6 @@ document.getElementById('comment_textarea').onkeyup = function () {
         
         
     }};
+
+
+ 
