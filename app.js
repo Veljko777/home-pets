@@ -46,14 +46,27 @@ app.use(function(req,res,next){
 //INDEX PAGE (show all posts)
 //=================================
 app.get("/", function(req, res){
-    Pets.find({} , function(err, allPets){
+    if(req.query.search){
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+        Pets.find({name: regex} , function(err, allPets){
+            
+            if(err){
+                console.log(err);
+            } else{
+                res.render("landing", {pets:allPets})
+            }
+        });
+    }else{
+        Pets.find({} , function(err, allPets){
         
-        if(err){
-            console.log(err);
-        } else{
-            res.render("landing", {pets:allPets})
-        }
-    })
+            if(err){
+                console.log(err);
+            } else{
+                res.render("landing", {pets:allPets})
+            }
+        });  
+    }
+    
     
 });
 
@@ -448,6 +461,10 @@ function isLoggedIn(req,res,next){
     res.redirect("/login");
     
 }
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
 
 
