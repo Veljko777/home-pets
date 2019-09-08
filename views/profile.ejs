@@ -2,40 +2,39 @@
 
 
 <div class="container">
-        
-                
-            
-            
     <div class="row">
-        <div class="col-md-3">
-               <h3><%=user.firstname%> <%=user.lastname%></h3>
-                <img src="<%=user.picture%>" width="200px" height="200px" alt="">
+        <div class="col-md-3 text-center">
+            <h3><%=user.firstname%> <%=user.lastname%></h3>
+            <img src="<%=user.picture%>" width="200px" height="200px" alt="">
+            <%if(currentUser && user._id.equals(currentUser._id)){%>
+                <div class="text-center">
+                    <a class="btn btn-primary btn-sm mb-1 mt-2" href="/profile/<%=currentUser._id%>/create" role="button">Create Post</a>
+                </div>  
+            <%}else{%>
+            <%}%>
         </div>
-        <div class="col-md-7">
-            
-            <a href="/profile/<%=user._id%>/create">Create Post</a>
+        <div class="col-md-7 ">
+            <h3 class="text-center mt-3">Your posts</h3>
+            <hr>
             <% user.pets.forEach(function(pet){%>
-                <div class="col-md-4 col-sm-6" >
-                    <div class="thumbnail img-hover-zoom " >
+                <div id="profile_posts" class="mt-5 text-center thumbnail" >
+                    <div class=" img-hover-zoom " >
+                            <h4 class="pt-1"><%=pet.name%></h4>
                         <a href="/show/<%=pet._id%>">
-                            <img class="rounded" src="<%=pet.image%>" width="auto" alt=""></a>
-                    <div class="caption mt-2">
-                        <h4><%=pet.name%></h4>
-                    </div>
-                    <p>
-                        <a href="/show/<%=pet._id%>">More info</a>
-                    </p>
+                            <img class="rounded" src="<%=pet.image%>" width="auto" alt="">
+                        </a>
+                        <div class="caption mt-2 ">
+                            <h6>Posted on: <%=pet.date%></h6>
+                            <h5 class="pb-2"><%=pet.likes.length%> people <i class="fa fa-heart logo"></i> this post</h5>
+                        </div>
                     </div>
                 </div>
             <%})%>
         </div>
-        <div class="col-md-2">
-                <a href="/profile/<%=user._id%>/edit">Edit Profile</a>
+        <div class="col-md-2 mt-4 text-center">
+            <a class="btn btn-primary btn-sm mb-1 mt-2" href="/profile/<%=user._id%>/edit">Edit Profile</a>
         </div>
     </div>
-
 </div>
-
-
 
 <%include ./partials/footer%>

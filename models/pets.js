@@ -1,6 +1,7 @@
 var mongoose=require("mongoose");
 var petSchema=new mongoose.Schema({
     name: String,
+    date:String,
     species:String,
     breed:String,
     image:String,
@@ -10,7 +11,7 @@ var petSchema=new mongoose.Schema({
              type:mongoose.Schema.Types.ObjectId,
             ref:"User"
             },
-         username:String},
+        username:String},
     comments:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Comment"
@@ -20,6 +21,7 @@ var petSchema=new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Like"
     }]
+    
     
 })
 module.exports=mongoose.model("Pets",petSchema);

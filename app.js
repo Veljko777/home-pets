@@ -5,13 +5,13 @@ var localStrategy=require("passport-local");
 var passportLocalMongoose=require("passport-local-mongoose");
 var mongoose=require("mongoose");
 var bodyParser=require("body-parser");
+var multer=require("multer");
 var Pets=require("./models/pets");
 var Comment=require("./models/comment");
 var User=require("./models/user")
 var Like=require("./models/likes")
 var methodOverride=require("method-override");
 var images={image:"/public/images/cat-2489845_960_720.jpg"}
-
 
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
@@ -22,7 +22,6 @@ app.use(require("express-session")({
     resave:false,
     saveUninitialized:false
 }));
-
 
 mongoose.connect("mongodb://localhost:27017/home-pets", {useNewUrlParser: true});
 app.use(bodyParser.urlencoded({extended:false}));
@@ -40,16 +39,13 @@ app.use(function(req,res,next){
     next();
 })
 
-
-
 //=================================
 //INDEX PAGE (show all posts)
 //=================================
 app.get("/", function(req, res){
     if(req.query.search){
         const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-        Pets.find({name: regex} , function(err, allPets){
-            
+        Pets.find({name: regex} , function(err, allPets){ 
             if(err){
                 console.log(err);
             } else{
@@ -58,7 +54,6 @@ app.get("/", function(req, res){
         });
     }else{
         Pets.find({} , function(err, allPets){
-        
             if(err){
                 console.log(err);
             } else{
@@ -66,8 +61,6 @@ app.get("/", function(req, res){
             }
         });  
     }
-    
-    
 });
 
 app.get("/dogs", function(req,res){
@@ -75,51 +68,50 @@ app.get("/dogs", function(req,res){
         if(err){
             console.log(err)
         }else{
-            res.render("dogs", {dogs:allDogs})
-            
+            res.render("dogs", {dogs:allDogs}) 
         }
     })
 })
+
 app.get("/cats", function(req,res){
     Pets.find({species:"Cat"}, function(err, allCats){
         if(err){
             console.log(err)
         }else{
             res.render("cats", {cats:allCats})
-            
         }
     })
 })
+
 app.get("/rabbits", function(req,res){
     Pets.find({species:"Rabbit"}, function(err, allRabbits){
         if(err){
             console.log(err)
         }else{
             res.render("rabbits", {rabbits:allRabbits})
-            
         }
     })
 })
+
 app.get("/parrots", function(req,res){
     Pets.find({species:"Parrot"}, function(err, allParrots){
         if(err){
             console.log(err)
         }else{
-            res.render("parrots", {parrots:allParrots})
-            
+            res.render("parrots", {parrots:allParrots}) 
         }
     })
-})
+});
+
 app.get("/other", function(req,res){
     Pets.find({species:"Other"}, function(err, allOther){
         if(err){
             console.log(err)
         }else{
-            res.render("other", {others:allOther})
-            
+            res.render("other", {others:allOther}) 
         }
     })
-})
+});
 
 //=================================
 //PROFILE ROUT
@@ -131,12 +123,8 @@ app.get("/profile/:user_id", function(req,res){
         }else{
             res.render("profile", {user:foundUser})
         }
-        
-        
     })
-})
-
-
+});
 
 app.get("/profile/:user_id/edit",checkProfileOwnerships, function(req,res){
     User.findById(req.params.user_id, function(err,foundUser){
@@ -144,9 +132,7 @@ app.get("/profile/:user_id/edit",checkProfileOwnerships, function(req,res){
     })
 })
 
-
 app.put("/profile/:user_id", checkProfileOwnerships, function(req,res){
-    
     var email=req.body.email;
     var picture=req.body.picture;
     var firstname=req.body.firstname;
@@ -155,13 +141,11 @@ app.put("/profile/:user_id", checkProfileOwnerships, function(req,res){
     User.findByIdAndUpdate(req.params.user_id, userdata, function(err, updatedUser){
         res.redirect("/profile/"+ req.params.user_id)
     })        
-})
-
+});
 
 //=================================
 //CREATE POST ROUT
 //=================================
-
 app.get("/profile/:user_id/create", checkProfileOwnerships, function(req,res){
     User.findById(req.params.user_id, function(err, user){
         if(err){
@@ -170,7 +154,6 @@ app.get("/profile/:user_id/create", checkProfileOwnerships, function(req,res){
             res.render("create", {user:user})
         }
     })
-    
 });
 
 app.post("/profile/:user_id/pets", checkProfileOwnerships, function(req,res){
@@ -179,6 +162,9 @@ app.post("/profile/:user_id/pets", checkProfileOwnerships, function(req,res){
             console.log(err)
         } else{
             var name=req.body.name;
+            var today = new Date();
+            var getdate =today.getDate()+'.'+(today.getMonth()+1)+'.'+today.getFullYear()+".";
+            var date=getdate 
             var species=req.body.species;
             var breed=req.body.breed;
             var image=req.body.image;
@@ -186,19 +172,19 @@ app.post("/profile/:user_id/pets", checkProfileOwnerships, function(req,res){
             var author={
                 id:req.user._id,
                 username:req.user.username
-            };
-            var newPet={name:name, species:species, breed:breed, image:image, description:description, author:author}
+                        };
+            var newPet={name:name, species:species, date:date, breed:breed, image:image, description:description, author:author}
             Pets.create(newPet, function(err,pet){
                 if(err){
                     console.log(err);
                 }else{
                     user.pets.push(pet)
                     user.save()
-                    res.redirect("/profile/"+ req.params.user_id)
-                }
-                })
+                    res.redirect("/profile/"+ req.params.user_id)   
+                    }
+                });
             }
-})
+    })
 })
 
 //=================================
@@ -221,7 +207,6 @@ app.get("/show/:id", function(req,res){
 app.get("/show/:id/edit", checkPostOwnerships, function(req,res){
     Pets.findById(req.params.id, function(err,foundPet){
         res.render("editPost", {pet:foundPet})
-        
     });
 });
 
@@ -278,9 +263,7 @@ app.post("/show/:id/like", isLoggedIn, function(req,res){
             }
         }
     })
-})
-
-
+});
 
 //=================================
 //LOGIN ROUT
@@ -295,8 +278,6 @@ app.post("/login", passport.authenticate("local", {
 }), function(req,res){
 });
 
-
-
 //=================================
 //LOGOUT ROUT
 //=================================
@@ -308,9 +289,9 @@ app.get("/logout", function(req,res){
 //=================================
 //REGISTER ROUT
 //=================================
-
 app.post("/register", function(req,res){
-    var newUser=new User({username:req.body.username, email:req.body.email, picture:"",firstname:"", lastname:""})
+    var basepicture="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAM1BMVEXk5ueutLfn6eqrsbTp6+zg4uOwtrnJzc/j5earsbW0uby4vcDQ09XGyszU19jd3+G/xMamCvwDAAAFLklEQVR4nO2d2bLbIAxAbYE3sDH//7WFbPfexG4MiCAcnWmnrzkjIRaD2jQMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMw5wQkHJczewxZh2lhNK/CBOQo1n0JIT74/H/qMV0Z7GU3aCcVPuEE1XDCtVLAhgtpme7H0s1N1U7QjO0L8F7llzGeh1hEG/8Lo7TUmmuSrOfns9xnGXpXxsONPpA/B6OqqstjC6Ax/0ujkNdYQQbKNi2k64qiiEZ+ohi35X+2YcZw/WujmslYewiAliVYrxgJYrdwUmwXsU+RdApUi83oNIE27YvrfB/ZPg8+BJETXnqh9CVzBbTQHgojgiCvtqU9thFJg/CKz3VIMKMEkIXxIWqIpIg2SkjYj+xC816mrJae2aiWGykxRNsW0UwiJghJDljYI5CD8GRiCtIsJxizYUPQ2pzItZy5pcisTRdk/a9m4amtNNfBuQkdVhSaYqfpNTSFGfb9GRIakrE2Pm+GFLaCQPqiu0OpWP+HMPQQcgQMiQprWXNmsVwIjQjYi/ZrhAqNTCgr2gu0Jnz85RSSjso0HkMFZ0YZjKkc26a/jlmh9JiDyDxi9oeorTYAzZkwwoMz19pzj9bnH/GP/+qbchjSGflneWYhtTuKdMOmNKZcJ5TjInQKcYXnESd/jQxy0ENpULTNGOGgxpap/oyw9pbUAqhfx2Dbkhovvfgz4iUzoM9+GlK6/Mh4q29hyC1mwro30hpVVLPF9wYQr71RazOeM5/cw81iBRD+A03aM9/C/obbrKjbYSpCmIVG3qT/Q8oeUo3Rz0IL7vI1tEbCB9pSiu8I/aV8x3Kg/BGWrWp4ZVs0nZfmAoEG4h/61yHYIJiFSl6Q0Vk6tTW1N8kYp8hdOkfHYYMXd2Qft+8CYwqYDSKvqIh+MCF8Wgca2u/cwdgeW3TtuVn6+1oBs3yLo5C2JpK6CvQzGpfUkz9UG/87gCsi5o2LIXolxN0FbwAsjOLEr+YJmXn7iR6N0BCt5p5cMxm7eAsfS+/CACQf4CTpKjzgkvr2cVarVTf96372yut7XLJ1sa7lv6VcfgYrWaxqr3Wlo1S6pvStr22sxOtTNPLzdY3nj20bPP+ejFdJYkLsjGLdtPBEbe/mr2bQKiXWJDroA+vtzc0p9aahuwqHMDYrQEXHEw9jwQl3drMpts9JBU1SdktPe5FBRdJQ6bwXBpa57ib2A8kukQDzMjh++Uo7Fo6Wd02Pkf4fknqoo4HtvAIjsqUcjx6DIPgWCaOML9rKI/oqD9/lgNrn+eF+p7j8tnzHBiR7+kdUGw/+V1Kzkc75mMy6U+FMaxjPibiM1U1uGM+puInHpmALZCgP4pt7i840MV8+0R1zPsRB6UTcqpizncYwZ89syDydfyWCwXB1l8/zRNGWbTG/GHKUm9AkxHMc/EGSk3z2+ArEhPEV5TUBLEvUGFcjEUH80J/jveTGOAJEljJbILWGQT3zRYiwuKsUXN1EEJAzBhRJFll7mBUG7KD8EqPkKekBREaL8hMDZLQSG6AQjtHPYmvTQnX0TtpC1SYCe2YdkkyLP3jj5BSbKiuR585eQhTgoje6yIb0Yb0C+mV6EYvebqw5SDy2WmubogZiF2AVxPC2FpDf8H2Q9QWo6IkjUxTWVEI3WY/wrCeSuqJ+eRWzXR/JXwgVjUMozbCOfoEZiSiKVGepqv5CJ8RyR4D7xBeamqa7z3BJ/z17JxuBPdv93d/a2Ki878MMAzDMAzDMAzDMAzDMF/KP09VUmxBAiI3AAAAAElFTkSuQmCC"
+    var newUser=new User({username:req.body.username, email:req.body.email, picture:basepicture,firstname:"Name", lastname:""})
     User.register(newUser, req.body.password, function(err, newUser){
         if(err){
             console.log(err);
@@ -323,13 +304,11 @@ app.post("/register", function(req,res){
     });
 });
 
-
 //=================================
 //COMMENT
 //=================================
 app.post("/show/:id/comments", isLoggedIn, function(req,res){
     Pets.findById(req.params.id, function(err,pet){
-
         if(err){
             console.log(err);
         } else{
@@ -346,8 +325,9 @@ app.post("/show/:id/comments", isLoggedIn, function(req,res){
                 }
             })
         }
-    })
-})
+    });
+});
+
 //=================================
 //EDIT COMMENT ROUT
 //=================================
@@ -355,7 +335,6 @@ app.get("/show/:id/comments/:comment_id/edit", checkCommentOwnerships, function(
     Comment.findById(req.params.comment_id, function(err,foundComment){
         res.render("editComment", {pet_id:req.params.id, comment:foundComment})
     })
-   
 })
 
 app.put("/show/:id/comments/:comment_id", checkCommentOwnerships, function(req,res){
@@ -374,9 +353,6 @@ app.delete("/show/:id/comments/:comment_id", checkCommentOwnerships, function(re
         res.redirect("/show/"+req.params.id);
     })
 })
-
-
-
 
 
 //=================================
@@ -407,10 +383,8 @@ function checkIfLiked(req,res,next){
     Pets.findById(req.params.pet_id, function(err, foundPet){
             foundPet.likes.find({}, function(err, foundLike){
                 console.log(foundLike)
-            })
-            
+            }) 
         })
-    
 }
 
 function checkProfileOwnerships(req,res,next){
@@ -453,19 +427,16 @@ function checkCommentOwnerships(req,res,next){
     }
 }
 
-
 function isLoggedIn(req,res,next){
     if(req.isAuthenticated()){
         return next();
     }
     res.redirect("/login");
-    
 }
 
 function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };
-
 
 
 app.listen(3000, function(){

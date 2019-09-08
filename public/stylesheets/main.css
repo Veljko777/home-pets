@@ -11,32 +11,30 @@ body{
     height: 100%;
     font-family: 'Crimson Text', serif;
 }
+
 .wrapper {
-min-height: 100%;
-position: relative;
+    min-height: 100%;
+    position: relative;
 }
+
+.logo{
+    color: red;
+}
+
 #navbar{
     background: #65e043;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to bottom, #1a740e, #65e043);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to bottom, #1a740e, #65e043); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+    background: -webkit-linear-gradient(to bottom, #1a740e, #65e043);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #1a740e, #65e043); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
-.logo{
-    
-    color: red;
+
+#navbarDropdown {
+    font-size: 18px;
 }
 
 #jumbotron {
     background: #65e043;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to top, #1a740e, #65e043);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to top, #1a740e, #65e043); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-}
-
-#navbarDropdown {
-    font-size: 18px;
-   
-    
 }
 
 .dropdown-item:hover {
@@ -48,19 +46,19 @@ background: linear-gradient(to bottom, #1a740e, #65e043); /* W3C, IE 10+/ Edge, 
     background: #65e043;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to bottom, #1a740e, #65e043);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to bottom, #1a740e, #65e043); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
 }
 
 .dropdownLikes{
     background:rgb(226, 236, 199);
 }
+
 .img-hover-zoom img {
     transition: transform .5s ease;
-  }
+}
 
 .img-hover-zoom img:hover {
-    transform: scale(1.05);}
-
+    transform: scale(1.05);
+}
 
 .register{
     margin: 20px auto; 
@@ -69,45 +67,41 @@ background: linear-gradient(to bottom, #1a740e, #65e043); /* W3C, IE 10+/ Edge, 
     padding:20px;
     text-align: center;
     float: right;
-    
 }
 
 .register input{
-
     margin: 5px auto;
 }
+
 .register label{
     color:rgb(57, 192, 52);
 }
+
 .register h3 {
     color:rgb(57, 192, 52);
 }
 
-
-.login{
-    text-align: end;
-    float: right;
+#login{
+display: flex;
 }
-.login label{
+
+#login label{
     color:rgb(57, 192, 52);
-   
 }
 
 .thumbnail {
     padding:0;
     text-align: center;
-    
-    }
-.thumbnail img{
-width:100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 
+.thumbnail img{
+    width:100%;
 }
 
 .thumbnail_landing_size img{
     height: 250px;
 }
-
-
 
 #show_pet_image{
     position: relative;
@@ -119,29 +113,38 @@ width:100%;
     max-height: 540px;
 }
 
+#profile_posts{
+    margin:auto;
+    text-align: center;
+    width:70%;
+}
+
+#profile_posts img{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    max-height:300px;
+}
+
 .show_pet_image_btn_one {
     position: absolute;
     width: 50px;
-    top: 4%;
+    top: 5%;
     left: 94%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
-
 }
+
 .show_pet_image_btn_two {
     position: absolute;
     width:50px;
-    top: 4%;
+    top: 5%;
     left: 6%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
-
 }
 
 .form-control {
     max-width: 300px;
 }
-
 
 .create{
     color:rgb(57, 192, 52);
@@ -149,15 +152,11 @@ width:100%;
     margin-bottom:0;
 }
 
-
-
-
 .textarea {
     position: relative;
     width: 100%;
   }
   
- 
   .textarea img {
     width: 100%;
     height: auto;
@@ -165,9 +164,7 @@ width:100%;
   
   .textarea textarea{
       width:100%;
-      height:auto;
-      
-      
+      height:auto;  
   }
 
   .textarea button {
@@ -180,9 +177,6 @@ width:100%;
     cursor: pointer;
     border-radius: 5px;
   }
-  
-  
-
 
   #show_comment{
       padding-left:10px;
@@ -190,8 +184,6 @@ width:100%;
       margin-bottom: 5px;
       background-color: rgb(232, 252, 237);
       border-radius: 15px;
-   
-      
   }
 
   #show_comment_text{
@@ -202,7 +194,6 @@ width:100%;
       margin:0;
       margin-bottom:5px;
       padding: 0;
-   
   }
   
   .comment_btn{
@@ -229,15 +220,73 @@ width:100%;
     height: 50px;
     width: 100%;
     background-color: rgb(226, 236, 199);
-   
 }
+
 .footer p{
     text-align: center;
-   
 }
 
 .login_background{
     background-image: url("/images/pups-1.jpg");
     background-repeat: no-repeat;
     background-size: cover; 
+}
+
+@media only screen and (max-width: 1200px){
+    .login_background{
+        background-image:none;
+    }
+    .textarea button {
+        position: absolute;
+        top: 47.5%;
+        left: 95%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+    .textarea textarea{
+        width:80%;
+        height:auto;  
+    }
+    
+}
+   
+@media only screen and (max-width: 600px) {
+    #login{
+        display:inline-block; 
+    }
+    .textarea button {
+        position: absolute;
+        top: 47.5%;
+        left: 95%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+    .textarea textarea{
+        width:80%;
+        height:auto;  
+    }
+
+}
+@media only screen and (max-width: 768px){
+    .textarea button {
+        position: absolute;
+        top: 47.5%;
+        left: 95%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+    .textarea textarea{
+        width:90%;
+        height:auto;  
+       
+    }
 }

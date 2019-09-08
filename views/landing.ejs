@@ -14,8 +14,8 @@
                     <a class="btn  btn-primary btn-lg mb-1" href="/profile/<%=currentUser._id%>/create" role="button">Create Post</a>
                     <%}%>
             </div>
-            <div>
-                <form class="form-inline my-2 my-lg-0 " action="/" method="GET">
+            <div class="ml-4 mb-2 mt-2">
+                <form class="form-inline my-2 my-lg-0" action="/" method="GET">
                     <input class="form-control mr-sm-2" type="search" name="search" placeholder="Find pets" aria-label="Search">
                     <button class="btn btn-primary my-2 my-sm-0" value="Search" type="submit">Search</button>
                 </form>
@@ -31,18 +31,27 @@
         <h3 class="pb-1">Most <i class="fa fa-heart logo"></i> pets at the moment:</h3>
         <hr class="mb-4">
         <div class="row" >
+        <%pets.sort(function(a,b){%>
+            <%var nameA=a.likes.length;%>
+            <%var nameB=b.likes.length;%>
+            <%if(nameA < nameB){%>
+            <%    return 1;%>
+            <%}%>
+            <%if(nameA > nameB){%>
+            <%    return -1;%>
+            <%}%>
+        <%})%>
         <% pets.forEach(function(pet){%>
             <div class="col-md-4 col-sm-6" >
                 <div class="thumbnail img-hover-zoom thumbnail_landing_size" >
                     <a href="/show/<%=pet._id%>">
                         <img class="rounded" src="<%=pet.image%>" alt=""></a>
-                <div class="caption mt-2">  
-                    <h4><%=pet.name%></h4>
-                    
-                </div>
-                <p>
-                    <a href="/show/<%=pet._id%>">More info</a>
-                </p>
+                    <div class="caption mt-2">  
+                        <h4 class="mb-0 pb-0"><%=pet.name%></h4>
+                        <h5 class=""><%=pet.likes.length%> <i class="fa fa-heart logo"></i></h5>
+                        
+                    </div>
+                
                 </div>
             </div>
         <%})%>

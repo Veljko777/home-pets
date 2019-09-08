@@ -1,14 +1,29 @@
 <%include ./partials/header%>
 
 <div class="container">
-    <form action="/profile/<%=user._id%>?_method=PUT" method="POST">
-        <input type="text" name="picture" value="<%=user.picture%>" placeholder="URL of image">
-        <input type="text" name="username" value="<%=user.username%>">
-        <input type="text" name="email" value="<%=user.email%>">
+    <form class="create" action="/profile/<%=user._id%>?_method=PUT" method="POST">
+        <div class="form-group">
+            <label for="profile_picture">Picture:</label>
+            <input type="text" class="form-control" name="picture" id="profile_picture" value="<%=user.picture%>" placeholder="URL of image">
         
-        <input type="text" name="firstname" value="<%=user.firstname%>" placeholder="First name">
-        <input type="text" name="lastname" value="<%=user.lastname%>" placeholder="Last name">
-        <button>Submit</button>
+        </div>
+        <div class="form-group">
+            <label for="profile_username">Username:</label>
+            <input type="text" class="form-control" name="username" id="profile_username" value="<%=user.username%>">
+        </div>
+        <div class="form-group">
+            <label for="profile_email">Email:</label>
+            <input type="text" class="form-control" name="email" id="profile_email" value="<%=user.email%>">
+        </div>
+        <div class="form-group">
+            <label for="profile_first_name">First name:</label>
+            <input type="text" class="form-control" name="firstname" id="profile_first_name" value="<%=user.firstname%>" placeholder="First name">
+        </div>
+        <div class="form-group">
+            <label for="profile_last_name">Last name:</label>
+            <input type="text" class="form-control" name="lastname" id="profile_last_name" value="<%=user.lastname%>" placeholder="Last name">
+        </div>
+        <button class="btn btn-primary">Submit</button>
     </form>
 </div>
 

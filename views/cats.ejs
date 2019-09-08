@@ -21,9 +21,19 @@
 
 <div class="container text-center" >
     <div class="mt-3">
-        <h3 class="pb-1">Most <i class="fa fa-heart logo"></i> dogs at the moment:</h3>
+        <h3 class="pb-1">Most <i class="fa fa-heart logo"></i> cats at the moment:</h3>
         <hr class="mb-4">
         <div class="row" >
+        <%cats.sort(function(a,b){%>
+            <%var nameA=a.likes.length;%>
+            <%var nameB=b.likes.length;%>
+            <%if(nameA < nameB){%>
+            <%    return 1;%>
+            <%}%>
+            <%if(nameA > nameB){%>
+            <%    return -1;%>
+            <%}%>
+        <%})%>
         <% cats.forEach(function(pet){%>
             <div class="col-md-4 col-sm-6" >
                 <div class="thumbnail img-hover-zoom thumbnail_landing_size" >
@@ -31,6 +41,7 @@
                         <img class="rounded" src="<%=pet.image%>" alt=""></a>
                 <div class="caption mt-2">
                     <h4><%=pet.name%></h4>
+                    <h5 class=""><%=pet.likes.length%> <i class="fa fa-heart logo"></i></h5>
                 </div>
                 <p>
                     <a href="/show/<%=pet._id%>">More info</a>
